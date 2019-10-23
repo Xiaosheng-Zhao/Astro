@@ -107,3 +107,31 @@ cmd.NR()
 cmd.plot_residual(ax1,'k','Newton-Raphson')
 plt.legend()
 plt.savefig('non_solver.pdf')
+
+fig = plt.figure(figsize=(7,7))
+ax1 = plt.subplot(1,1,1)
+logn = np.arange(4,14,0.1)
+xe_a = []
+xe_b = []
+xe_c = []
+for i in logn:
+    cmd = non_linear(n = 10**i, T = 20, xM = 10**(-10))
+    cmd.NR()
+    xe_a.append(cmd.xe)
+    cmd = non_linear(n = 10**i, T = 20, xM = 10**(-12))
+    cmd.NR()
+    xe_b.append(cmd.xe)
+    cmd = non_linear(n = 10**i, T = 100, xM = 10**(-12))
+    cmd.NR()
+    xe_c.append(cmd.xe)
+
+ax1.plot(np.power(10,logn), xe_a, 'r|-', markersize = 15, label = '$T=20K, x_M =10^{-10}$')
+ax1.plot(np.power(10,logn), xe_b, 'g-', label = '$T=20K, x_M =10^{-12}$')
+ax1.plot(np.power(10,logn), xe_c, 'b-', label = '$T=100K, x_M =10^{-12}$')
+ax1.set_xlabel('$n[cm^{-3}]$', fontsize = 14)
+ax1.set_ylabel('$x_e$', fontsize = 14)
+ax1.set_xscale('log')
+ax1.set_yscale('log')
+ax1.set_title('Results from newton-Raphson method')
+plt.legend()
+plt.savefig('varied_n.pdf')
